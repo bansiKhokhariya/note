@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://snowy.hksync.com/
+
+# Sitemaps
+Sitemap: https://snowy.hksync.com/sitemap.xml
