@@ -17,10 +17,8 @@ export async function generateMetadata({ params }) {
       // If note not found, set appropriate metadata
       return {
         title: 'Note Not Found',
-        description: 'The requested note does not exist',
         openGraph: {
           title: 'Note Not Found',
-          description: 'The requested note does not exist',
           url: `https://note-nine-lime.vercel.app/${noteId}`,
         },
       };
@@ -28,26 +26,15 @@ export async function generateMetadata({ params }) {
 
     // Extract the title and description from note data
     const title = noteData.notes.title || 'Untitled Note';
-    const description = noteData.notes.description || 'This is a note without a description.';
     const canonicalUrl = `https://note-nine-lime.vercel.app/${noteId}`;
     
     // Return SEO tags, including OG tags
     return getSEOTags({
       title,
-      description,
       canonicalUrlRelative: `/${noteId}`,
       openGraph: {
         title,
-        description,
         url: canonicalUrl,
-        images: [
-          {
-            url: 'https://example.com/og-image.jpg', // Optionally include an image URL
-            width: 1200,
-            height: 630,
-            alt: title,
-          },
-        ],
       },
     });
   } catch (error) {
@@ -56,10 +43,8 @@ export async function generateMetadata({ params }) {
     // Fallback metadata if API call fails
     return {
       title: 'Error Loading Note',
-      description: 'There was an error loading the note data.',
       openGraph: {
         title: 'Error Loading Note',
-        description: 'There was an error loading the note data.',
         url: `https://note-nine-lime.vercel.app/${noteId}`,
       },
     };
