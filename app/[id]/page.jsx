@@ -121,7 +121,7 @@ export async function generateMetadata({ params }) {
       title,
       description, // Pass the extracted description for OG tags as well
       url: canonicalUrl,
-      images: [imageUrl], // Static image for social media previews
+      // images: [imageUrl], // Static image for social media previews
     },
   });
 }
