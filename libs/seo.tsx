@@ -26,7 +26,7 @@ export const getSEOTags = ({
   );
 
   return {
-    title: openGraph?.title || config.appName,
+    title: title || config.appName,
     description: description || config.appDescription,
     keywords: keywords || ["note", "notes app", "productivity"],
     applicationName: config.appName,
