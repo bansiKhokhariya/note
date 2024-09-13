@@ -34,7 +34,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "app/justwatch/page.jsx", "app/page.jsx", "app/layout.tsx"  ],
+, "app/justwatch/page.jsx", "app/page.jsx", "app/layout.tsx", "libs/seo.tsx"  ],
   "exclude": [
     "node_modules"
   ]

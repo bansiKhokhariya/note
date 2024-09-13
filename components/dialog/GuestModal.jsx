@@ -8,7 +8,7 @@ export default function GuestModal({ noteUniqueId, onSubmit, isOpen, theme, onCl
   const { data: session, status } = useSession();
   if (!isOpen) return null;
 
-  const currentUrl = `https://snowy.hksync.com/${noteUniqueId}`;
+  const currentUrl = `https://note-nine-lime.vercel.app/${noteUniqueId}`;
 
   const shareUrls = {
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`,

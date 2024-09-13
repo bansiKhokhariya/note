@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://snowy.hksync.com/
+Host: https://note-nine-lime.vercel.app/
 
 # Sitemaps
-Sitemap: https://snowy.hksync.com/sitemap.xml
+Sitemap: https://note-nine-lime.vercel.app/sitemap.xml

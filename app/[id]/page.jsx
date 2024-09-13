@@ -1,62 +1,72 @@
-// 'use client';
-// import { usePathname } from 'next/navigation';
-// import Layout from '@/components/Layout';
-// import MainContent from '@/components/MainContent';
-// import { useState, useEffect } from 'react';
-
-// export default function NotePage() {
-//   const pathname = usePathname();
-
-//   // Extract noteId from pathname by splitting the string
-//   const noteId = pathname?.split('/').pop();
-
-//   const [selectedNoteId, setSelectedNoteId] = useState(noteId);
-
-//   useEffect(() => {
-//     if (noteId && selectedNoteId !== noteId) {
-//       setSelectedNoteId(noteId); // Update the selected note when the route changes
-//     }
-//   }, [noteId, selectedNoteId]);
-
-//   return (
-//     <Layout selectedNoteId={selectedNoteId} onSelectNote={setSelectedNoteId}>
-//       <MainContent noteId={selectedNoteId} />
-//     </Layout>
-//   );
-// }
-
 import { getSEOTags } from '@/libs/seo';
 import Layout from '@/components/Layout';
 import MainContent from '@/components/MainContent';
 
-// Fetch note data server-side in the generateMetadata function
+// Fetch note data server-side and generate metadata (including OG tags)
 export async function generateMetadata({ params }) {
   const { id: noteId } = params;
-
-  console.log(params.id);
   
-  // Fetch note data
-  const res = await fetch(`https://snowy.hksync.com/api/note/?noteUniqueId=${noteId}`);
-  const noteData = await res.json();
+  try {
+    // Fetch note data based on note ID
+    const res = await fetch(`https://note-nine-lime.vercel.app/api/note/?noteUniqueId=${noteId}`, {
+      next: { revalidate: 60 }, // Optionally cache the response for 60 seconds
+    });
+    const noteData = await res.json();
 
-  if (!noteData.success) {
+    if (!noteData.success) {
+      // If note not found, set appropriate metadata
+      return {
+        title: 'Note Not Found',
+        description: 'The requested note does not exist',
+        openGraph: {
+          title: 'Note Not Found',
+          description: 'The requested note does not exist',
+          url: `https://note-nine-lime.vercel.app/${noteId}`,
+        },
+      };
+    }
+
+    // Extract the title and description from note data
+    const title = noteData.notes.title || 'Untitled Note';
+    const description = noteData.notes.description || 'This is a note without a description.';
+    const canonicalUrl = `https://note-nine-lime.vercel.app/${noteId}`;
+    
+    // Return SEO tags, including OG tags
+    return getSEOTags({
+      title,
+      description,
+      canonicalUrlRelative: `/${noteId}`,
+      openGraph: {
+        title,
+        description,
+        url: canonicalUrl,
+        images: [
+          {
+            url: 'https://example.com/og-image.jpg', // Optionally include an image URL
+            width: 1200,
+            height: 630,
+            alt: title,
+          },
+        ],
+      },
+    });
+  } catch (error) {
+    console.error('Error fetching note data:', error);
+
+    // Fallback metadata if API call fails
     return {
-      title: 'Note Not Found',
-      description: 'The requested note does not exist',
+      title: 'Error Loading Note',
+      description: 'There was an error loading the note data.',
+      openGraph: {
+        title: 'Error Loading Note',
+        description: 'There was an error loading the note data.',
+        url: `https://note-nine-lime.vercel.app/${noteId}`,
+      },
     };
   }
-
-  const title = noteData.notes.title || 'Untitled Note';
-
-
-  console.log("title in generateMetadata",title);
-  
-  return getSEOTags({
-    title,
-    canonicalUrlRelative: `/${noteId}`,
-  });
 }
 
+// Page component
 export default function NotePage({ params }) {
   const { id: noteId } = params;
 
@@ -66,5 +76,3 @@ export default function NotePage({ params }) {
     </Layout>
   );
 }
-
-
